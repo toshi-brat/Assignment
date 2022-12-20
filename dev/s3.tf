@@ -1,19 +1,13 @@
-module "vpc_log_bucket"{
+module "log_bucket"{
     source = "../modules/s3"
-    bucket_name =""
-    acl =""
-    tags=""
+    bucket_name = "Logs_Bucket"
+    acl = "private"
+    #tags=""
 }
-module "web_server_log_bucket"{
+module "backup_bucket"{
     source = "../modules/s3"
-    bucket_name =""
-    acl =""
-    tags=""
+    bucket_name = "Backup_Bucket"
+    acl = "private"
+    #tags=""
+}
 
-}
-module "cloud_watch_log_bucket"{
-    source = "../modules/s3"
-    bucket_name =""
-    acl =""
-    tags=""
-}

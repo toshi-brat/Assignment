@@ -27,9 +27,9 @@ resource "aws_security_group" "vpc-sg" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = {
-    Name = ""
-  }
+  # #tags = {
+  #   Name = ""
+  # }
 }
 
 

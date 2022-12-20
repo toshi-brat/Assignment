@@ -12,4 +12,4 @@ variable "snet" {
 #   type = map
 # }
 
-variable "pri-snet" {}
+# variable "pri-snet" {}
