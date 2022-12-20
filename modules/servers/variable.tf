@@ -9,4 +9,5 @@ variable "min-size"{}
 variable "desired-size"{}
 variable "max-size"{}
 variable "target-group"{}
-#variable "instance-profile" {}
+variable "instance-profile" {}
+variable "subnet" {}

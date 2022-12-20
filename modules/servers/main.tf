@@ -2,7 +2,7 @@
 resource "aws_launch_configuration" "web_launch_conf" {
   name_prefix          = var.name
   image_id             = var.web-image-id
-  #iam_instance_profile = var.instance-profile
+  iam_instance_profile = var.instance-profile
   instance_type               = var.instance-type
   key_name                    = var.key_name
   security_groups             = var.web-sg
@@ -20,28 +20,24 @@ resource "aws_autoscaling_group" "devops_web_asg" {
   desired_capacity     = var.desired-size
   max_size             = var.max-size
   health_check_type    = "EC2"
-  availability_zones   = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  #availability_zones   = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
   target_group_arns = [var.target-group]
 
-  enabled_metrics = [
-    "GroupMinSize",
-    "GroupMaxSize",
-    "GroupDesiredCapacity",
-    "GroupInServiceInstances",
-    "GroupTotalInstances"
-  ]
-
-  metrics_granularity = "1Minute"
-
-  # vpc_zone_identifier = [
-  #   aws_subnet.devops-pub-1a.id,
-  #   aws_subnet.devops-pub-1b.id,
-  #   aws_subnet.devops-pub-1c.id
+  # enabled_metrics = [
+  #   "GroupMinSize",
+  #   "GroupMaxSize",
+  #   "GroupDesiredCapacity",
+  #   "GroupInServiceInstances",
+  #   "GroupTotalInstances"
   # ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  # metrics_granularity = "1Minute"
+
+  vpc_zone_identifier = var.subnet
+
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 
 }
 

@@ -11,5 +11,5 @@ variable "pri-snet" {
 variable "pub-cidr" {
 }
 variable "pub-region" {
-  
+
 }

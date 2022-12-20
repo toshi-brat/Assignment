@@ -1,20 +1,20 @@
 module "uat_vpc" {
-  
+
   source          = "../modules/network"
   cidr            = var.cidr
   pri-snet        = var.pri-snet
-  pub-cidr = var.pub-cidr
-  pub-region = var.pub-region
+  pub-cidr        = var.pub-cidr
+  pub-region      = var.pub-region
   is_nat_required = true
-  
+
 }
 
 resource "aws_flow_log" "vpc_flow_logs" {
   iam_role_arn    = aws_iam_role.vpc_logs_role.arn
-  log_destination = module.log_bucket.bucker_arn
+  log_destination = aws_cloudwatch_log_group.vpc_flow_logs_group.arn
   traffic_type    = "ALL"
   vpc_id          = module.uat_vpc.vpc-id
- 
+
 }
 
 resource "aws_cloudwatch_log_group" "vpc_flow_logs_group" {

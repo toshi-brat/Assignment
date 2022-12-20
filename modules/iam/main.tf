@@ -1,3 +1,4 @@
+######bucket policy
 resource "aws_iam_policy" "bucket_policy" {
   name        = "my-bucket-policy"
   path        = "/"
@@ -16,7 +17,7 @@ resource "aws_iam_policy" "bucket_policy" {
           "s3:DeleteObject"
         ],
         "Resource" : [
-          "arn:aws:s3:::mylab321/*",
+          "arn:${var.bucket-name}/*",
           ]
       }
     ]
@@ -43,10 +44,7 @@ resource "aws_iam_role_policy_attachment" "bucket_policy" {
   role       = aws_iam_role.ec2-access-to-S3.name
   policy_arn = aws_iam_policy.bucket_policy.arn
 }
-resource "aws_iam_instance_profile" "ec2_s3_profile" {
-  name = "ec2-profile"
-  role = aws_iam_role.ec2-access-to-S3.name
-}
+
 #####EC2CodeDeploy Role
 resource "aws_iam_role" "devops_ec2codedeploy_role" {
   name = "devops2_ec2codedeploy_role"
@@ -72,16 +70,24 @@ EOF
   # }
 
 }
-resource "aws_iam_role_policy_attachment" "ec2_fullaccess_attach" {
-  role       = aws_iam_role.devops_ec2codedeploy_role.name
-  policy_arn = var.AmazonEC2FullAccess_arn
-}
+# resource "aws_iam_role_policy_attachment" "ec2_fullaccess_attach" {
+#   role       = aws_iam_role.devops_ec2codedeploy_role.name
+#   policy_arn = var.AmazonEC2FullAccess_arn
+# }
 
 resource "aws_iam_role_policy_attachment" "ec2_s3fullaccess_attach" {
   role       = aws_iam_role.devops_ec2codedeploy_role.name
-  policy_arn = var.AmazonS3FullAccess_arn
+  policy_arn = aws_iam_policy.bucket_policy.arn
 }
-#AWS Code Deploy Role
+
+# ---------------------------------
+# Attach default Codedeploy policy to Role
+# ---------------------------------
+
+resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
+  role       = aws_iam_role.devops_ec2codedeploy_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+}
 
 resource "aws_iam_role" "devops_codedeploy_role" {
   name = "devops2_codedeploy_role"
@@ -108,10 +114,10 @@ EOF
 
 }
 
-resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
-  role       = aws_iam_role.devops_codedeploy_role.name
-  policy_arn = var.AWSCodedeploy_arn
-}
+# resource "aws_iam_role_policy_attachment" "codedeploy_attach" {
+#   role       = aws_iam_role.devops_codedeploy_role.name
+#   policy_arn = var.AWSCodedeploy_arn
+# }
 
 resource "aws_iam_instance_profile" "ec2_cd_instance_profile" {
   name = "ec2_cd_instance_profile"
