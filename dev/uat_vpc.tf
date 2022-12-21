@@ -10,10 +10,11 @@ module "uat_vpc" {
 }
 
 resource "aws_flow_log" "vpc_flow_logs" {
-  iam_role_arn    = aws_iam_role.vpc_logs_role.arn
-  log_destination = aws_cloudwatch_log_group.vpc_flow_logs_group.arn
-  traffic_type    = "ALL"
-  vpc_id          = module.uat_vpc.vpc-id
+  iam_role_arn         = aws_iam_role.vpc_logs_role.arn
+  log_destination      = module.log_bucket.bucker_arn
+  log_destination_type = "s3"
+  traffic_type         = "ALL"
+  vpc_id               = module.uat_vpc.vpc-id
 
 }
 

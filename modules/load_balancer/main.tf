@@ -1,6 +1,6 @@
 resource "aws_lb" "uat-lb" {
   name               = "forntend-uat-lb"
-  internal           = false
+  internal           = var.internal
   load_balancer_type = "application"
   security_groups    = [var.lb_sg]
   subnets            = [for v in var.snet: v.snet-id]
@@ -11,18 +11,13 @@ resource "aws_lb" "uat-lb" {
   #   Environment = "uat"
   # }
 }
-resource "aws_lb_target_group" "frontend-tg" {
-  name     = "uat-web-tg"
+resource "aws_lb_target_group" "tg" {
+  name     = var.tg-name
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc-id
 }
-resource "aws_lb_target_group" "backend-tg" {
-  name     = "uat-app-tg"
-  port     = 8080
-  protocol = "TCP"
-  vpc_id   = var.vpc-id
-}
+
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.uat-lb.arn
   port              = "80"
@@ -32,7 +27,7 @@ resource "aws_lb_listener" "front_end" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend-tg.arn
+    target_group_arn = aws_lb_target_group.tg.arn
   }
 }
 

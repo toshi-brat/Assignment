@@ -7,6 +7,12 @@ variable "vpc-id" {}
 variable "snet" {
   type = map
 }
+variable "internal" {
+  
+}
+variable "tg-name" {
+  
+}
 
 # variable "attach" {  
 #   type = map

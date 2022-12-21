@@ -46,6 +46,26 @@ module "front-end-sg" {
     }
   }
 }
+module "internal-lb-sg" {
+  source = "../modules/security"
+  vpc_id = module.uat_vpc.vpc-id
+  sg_details = {
+    "internal-lb" = {
+      description = "httpd inbound"
+      name        = "web-server"
+      ingress_rules = [
+        {
+          cidr_blocks     = null
+          from_port       = 80
+          protocol        = "tcp"
+          self            = null
+          to_port         = 80
+          security_groups = [lookup(module.front-end-sg.output-sg-id, "web-server", null)]
+        }
+      ]
+    }
+  }
+}
 
 module "back-end-sg" {
   source = "../modules/security"
@@ -61,7 +81,7 @@ module "back-end-sg" {
           protocol        = "tcp"
           self            = null
           to_port         = 8080
-          security_groups = [lookup(module.front-end-sg.output-sg-id, "web-server", null)]
+          security_groups = [lookup(module.internal-lb-sg.output-sg-id, "internal-lb", null)]
         }
       ]
     }
