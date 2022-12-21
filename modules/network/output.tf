@@ -7,3 +7,6 @@ output "cidr_block" {
 output "pri-snet-id" {
 value = {for k,v in aws_subnet.pri-snet: k => v.id}
 }
+output "pub-snet-id" {
+value = {for k,v in aws_subnet.pub-snet: k => v.id}
+}

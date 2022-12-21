@@ -14,10 +14,10 @@ resource "aws_vpc" "uat_vpc" {
 # PUB-SUBNET
 ############
 resource "aws_subnet" "pub-snet" {
-  vpc_id                = aws_vpc.uat_vpc.id
-  cidr_block            = var.pub-cidr
-  availability_zone     = var.pub-region
-  
+vpc_id                = aws_vpc.uat_vpc.id
+  for_each              = var.pub-snet
+  cidr_block            = each.value["cidr_block"]
+  availability_zone     = each.value["availability_zone"]
 }
 ############
 # PVT-SUBNET

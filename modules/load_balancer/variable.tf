@@ -13,6 +13,9 @@ variable "internal" {
 variable "tg-name" {
   
 }
+variable "health_check_port" {
+  
+}
 
 # variable "attach" {  
 #   type = map

@@ -1,13 +1,13 @@
 variable "cidr" {
   description = " The desired CIRD range of VPC"
 }
-# variable "pub-snet" {
-#   description = "Desired Public Subnet Ranges"
-#     type = map(object({
-#     cidr_block          = string
-#     availability_zone   = string
-# }))
-#}
+variable "pub-snet" {
+  description = "Desired Public Subnet Ranges"
+    type = map(object({
+    cidr_block          = string
+    availability_zone   = string
+}))
+}
 
 variable "pri-snet" {
   description = "Desired Private Subnet Ranges"
@@ -31,12 +31,6 @@ variable "pri-snet" {
 #   description = "Code Written By"
 # }
 
-variable "pub-cidr" {
-  
-}
-variable "pub-region" {
-  
-}
 variable "is_nat_required" {
   
 }

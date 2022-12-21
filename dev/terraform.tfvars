@@ -10,6 +10,14 @@ pri-snet = {
     availability_zone = "ap-southeast-1b"
   }
 }
-pub-cidr   = "10.0.0.0/21"
-pub-region = "ap-southeast-1a"
+pub-snet = {
+  s1 = {
+    cidr_block        = "10.0.0.0/22"
+    availability_zone = "ap-southeast-1a"
+  }
+  s2 = {
+    cidr_block        = "10.0.4.0/22"
+    availability_zone = "ap-southeast-1b"
+  }
+}
 

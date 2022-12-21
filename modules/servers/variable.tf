@@ -11,3 +11,6 @@ variable "max-size"{}
 variable "target-group"{}
 variable "instance-profile" {}
 variable "subnet" {}
+
+
+
