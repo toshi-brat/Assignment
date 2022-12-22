@@ -5,3 +5,7 @@ output "tg-arn" {
 output "alb-name" {
   value = aws_lb.uat-lb.name
 }
+
+output "alb-dns" {
+  value = aws_lb.uat-lb.dns_name
+}

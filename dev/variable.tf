@@ -8,8 +8,10 @@ variable "pri-snet" {
     availability_zone = string
   }))
 }
-variable "pub-cidr" {
-}
-variable "pub-region" {
-
+variable "pub-snet" {
+  description = "Desired Public Subnet Ranges"
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+  }))
 }

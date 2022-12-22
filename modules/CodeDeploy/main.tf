@@ -18,5 +18,4 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
       name = var.alb-name
     }
   }
-
 }

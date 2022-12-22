@@ -3,8 +3,7 @@ module "uat_vpc" {
   source          = "../modules/network"
   cidr            = var.cidr
   pri-snet        = var.pri-snet
- pub-snet = var.pub-snet
-  pub-region      = var.pub-region
+  pub-snet        = var.pub-snet
   is_nat_required = true
 
 }
