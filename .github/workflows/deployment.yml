@@ -6,30 +6,51 @@ on:
 
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  deploy:
+    name: 'CD Pipeline'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        appname: ['App-Deploy']
+        webname: ['Web-Deploy']
+        web-deploy-group: ['web-deployment-grou']
+        app-deploy-group: ['app-deployment-grou']
+        s3-bucket: ['']
     env:
       AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-
-
-  deploy:
-    runs-on: ubuntu-latest
-    environment: Prod
-    permissions:
-      id-token: write
-      contents: read
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install AWS CLI 2
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
     - uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
         role-session-name: GitHub-Action-Role
         aws-region: ${{ env.AWS_REGION }}
-    - run: |
-        echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
-        commit_hash=`git rev-parse HEAD`
-        aws deploy create-deployment --application-name CodeDeployAppNameWithASG --deployment-group-name CodeDeployGroupName --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash --ignore-application-stop-failures
+
+
+    - name: WEB Deployment
+      run: |
+         aws deploy create-deployment \
+           --application-name ${{ matrix.webname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.web-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-web-filename }}.zip,bundleType=zip \
+
+    - name: APP Deployment
+      run: |
+         aws deploy create-deployment \
+           --application-name ${{ matrix.appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-app-filename }}.war,bundleType=war  \
